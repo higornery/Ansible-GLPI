@@ -1,2 +1,3 @@
 ---
-# tasks file for GLPI
+# Install and configure GLPI + Create a Website in Nginx
+- include: glpi.yml

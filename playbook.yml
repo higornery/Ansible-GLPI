@@ -1,3 +1,5 @@
-- hosts: GLPI
-  remote_user: higor
-  become: yes
+hosts: glpi_srv
+user: myuser
+become: true
+roles:
+  - { role: glpi, tags: [ 'glpi' ] }

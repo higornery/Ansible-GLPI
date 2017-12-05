@@ -1,2 +1,20 @@
 ---
-# defaults file for GLPI
+# Default variables for this role
+
+# System user
+glpi_user: glpi
+glpi_user_password: MyPassword
+
+# Database credentials
+glpi_db_password: MyPassword
+
+# Website configuration
+glpi_hostname: nextcloud.mysite.com
+
+# Let's Encrypt email address
+certbot_email: mymail@mail.com
+
+# Server configuration
+db_server: "{{ inventory_hostname }}"
+glpi_server: localhost
+glpi_version: 9.1.6

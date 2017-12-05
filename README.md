@@ -1,38 +1,79 @@
-Role Name
+Ansible Role: GLPI
 =========
 
-A brief description of the role goes here.
+This role installs and configures GLPI. Note that this particular role is depending on two others:
+- [ansible-role-database](https://github.com/GSquad934/ansible-role-database)
+- [ansible-role-webserver](https://github.com/GSquad934/ansible-role-webserver)
+
+
+Once MariaDB and Nginx (from the two roles above) are up and running, this role performs the following actions:
+- Download the latest version of GLPI
+- Create a system user and configure the database for the WebApp
+- Configure and enables a Website in Nginx to access GLPI
+- Configure HTTPS and generate certificates with Let's Encrypt (if FQDN of the Website can be resolved)
+- If FQDN of the Website cannot be resolved, default SSL certificates are deployed
+
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+No specific requirements for this role.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Multiple variables are necessary in order to properly configure NextCloud.
+
+Here is how they can be configured:
+
+```
+glpi_user: glpi
+glpi_password: MyPassword
+glpi_db_password: MyPassword
+glpi_hostname: glpi.mysite.com
+certbot_email: mymail@mail.com
+db_server: "{{ inventory_hostname }}" (this equals to *localhost*)
+glpi_server: localhost
+glpi_version: 9.1.6
+```
+
+The variables above can be configured as group_vars or host_vars. As far as the credentials are concerned, these should be kept in a separate secret vars_file encrypted with *ansible-vault*.
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role depends on two other roles as stated above:
+- [ansible-role-database](https://github.com/GSquad934/ansible-role-database)
+- [ansible-role-webserver](https://github.com/GSquad934/ansible-role-webserver)
+
+
+If you install this role via Ansible-Galaxy, the name of the roles are [*GSquad934.database*](https://github.com/GSquad934/ansible-role-database) and [*GSquad934.webserver*](https://github.com/GSquad934/ansible-role-webserver).
+
+
+However, if you have MariaDB and Nginx installed, this role should still works if you adapt it.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Here is a simple example playbook to use this role:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```
+hosts: glpi_srv
+user: myuser
+become: true
+roles:
+  - { role: glpi, tags: [ 'glpi' ] }
+```
 
 License
 -------
 
-BSD
+MIT / BSD
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+My name is Gaétan. You can follow me on [Twitter](https://twitter.com/gaetanict)
+
+Website: [ICT Pour Tous](https://www.ictpourtous.com)
